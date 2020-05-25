@@ -16,7 +16,11 @@ func main() {
 
 	port = fmt.Sprintf(":%s", port)
 	server := tserver.NewServer(&tserver.ServerConfig{
+		// Listening Port
 		Addr: port,
+
+		// Static content directory
+		StaticDir: "site",
 	})
 	server.Start(tserver.DefaultHandlers)
 }
