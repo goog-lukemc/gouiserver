@@ -4,18 +4,20 @@ Copyright 2018 The Go Authors. All rights reserved.
 Use of this source code is governed by a BSD-style
 license that can be found in the LICENSE file.
 -->
-<html id="html">
+<html>
 
-<head id="head">
+<head>
 	<meta charset="utf-8">
-	<title id="title">
-		Default Title
-	</title>
+	<title>Go wasm</title>
 </head>
 
-<body id="body">
-
-	<script src="/js/wasm_exec.js"></script>
+<body>
+	<!--
+	Add the following polyfill for Microsoft Edge 17/18 support:
+	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+	(see https://caniuse.com/#feat=textencoder)
+	-->
+	<script src="wasm_exec.js"></script>
 	<script>
 		if (!WebAssembly.instantiateStreaming) { // polyfill
 			WebAssembly.instantiateStreaming = async (resp, importObject) => {
@@ -26,14 +28,22 @@ license that can be found in the LICENSE file.
 
 		const go = new Go();
 		let mod, inst;
-		WebAssembly.instantiateStreaming(fetch("/wasm/app.wasm"), go.importObject).then((result) => {
-			go.run(result.instance)
-
+		WebAssembly.instantiateStreaming(fetch("test.wasm"), go.importObject).then((result) => {
+			mod = result.module;
+			inst = result.instance;
+			document.getElementById("runButton").disabled = false;
 		}).catch((err) => {
 			console.error(err);
 		});
 
+		async function run() {
+			console.clear();
+			await go.run(inst);
+			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+		}
 	</script>
 
+	<button onClick="run();" id="runButton" disabled>Run</button>
 </body>
+
 </html>
