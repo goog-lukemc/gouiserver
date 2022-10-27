@@ -20,7 +20,7 @@ func main() {
 		Addr: port,
 
 		// Static content directory
-		StaticDir: "site",
+		StaticDir: "../site",
 	})
 	server.Start(tserver.DefaultHandlers)
 }
