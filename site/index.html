@@ -8,7 +8,7 @@ license that can be found in the LICENSE file.
 
 <head>
 	<meta charset="utf-8">
-	<title>Go wasm</title>
+	<title>Blog</title>
 </head>
 
 <body>
@@ -17,7 +17,7 @@ license that can be found in the LICENSE file.
 	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
 	(see https://caniuse.com/#feat=textencoder)
 	-->
-	<script src="wasm_exec.js"></script>
+	<script src="/js/wasm_exec.js"></script>
 	<script>
 		if (!WebAssembly.instantiateStreaming) { // polyfill
 			WebAssembly.instantiateStreaming = async (resp, importObject) => {
@@ -28,7 +28,7 @@ license that can be found in the LICENSE file.
 
 		const go = new Go();
 		let mod, inst;
-		WebAssembly.instantiateStreaming(fetch("test.wasm"), go.importObject).then((result) => {
+		WebAssembly.instantiateStreaming(fetch("/wasm/app.wasm"), go.importObject).then((result) => {
 			mod = result.module;
 			inst = result.instance;
 			document.getElementById("runButton").disabled = false;
